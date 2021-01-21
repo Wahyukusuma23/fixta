@@ -17,7 +17,7 @@ class LoginController extends Controller
     public function logint(Request $request)
     {
         if (Auth::guard('kary')->attempt(['nik' => $request->nik, 'password' => $request->password])) {
-            dd();
+            return redirect()->route('karyawan.index');
         }else {
             return redirect()->back()->with('error','Password atau NIK salah');
         }

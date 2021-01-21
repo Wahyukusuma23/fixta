@@ -20,3 +20,6 @@ Route::get('/', 'LoginController@index')->name('home');
 Route::get('/register', 'RegisterController@view')->name('register.view');
 Route::post('/register', 'RegisterController@register')->name('register.post');
 Route::post('/login', 'LoginController@logint')->name('login.post');
+Route::get('/karyawan_dashboard', 'KaryawanController@index')->name('karyawan.index');
+Route::get('/karyawan_pengajuan', 'KaryawanController@form_imp')->name('karyawan.pengajuan');
+Route::get('/list_pengajuan', 'KaryawanController@list_pengajuan')->name('list_pengajuan');

@@ -37,10 +37,10 @@
                         <input type="text" class="form-control" placeholder="Line Kav" name="line_kav">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password" name="password">
+                        <input type="password" class="form-control" placeholder="Password" name="password" autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Confirm Password" name="password_confirmation">
+                        <input type="password" class="form-control" placeholder="Confirm Password" name="password_confirmation" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary right" type="submit">Daftar</button>
