@@ -7,9 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Template Mo">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
 
     <title>IMP - Online</title>
+    <style>
+        .alert{
+            position: absolute !important;
+            top: 5rem;
+            z-index: 5;
+        }
+    </style>
 <!--
 
 ART FACTORY
@@ -54,11 +62,16 @@ https://templatemo.com/tm-537-art-factory
                 <div class="col-12">
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
-                        <a href="#" class="logo"><img src="/images/sai.png" width="130px"></a>
+                        <a href="{{route('home')}}" class="logo"><img src="/images/sai.png" width="130px"></a>
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
+                            @if (Auth::guard('kary')->check())
+                            <li><a href="{{route('karyawan.index')}}" class="btn-reg">Dashboard</a></li>
+                            <li><a href="{{route('user.logout')}}">Logout</a></li>
+                            @else
                             <li><a href="{{route('register.view')}}" class="btn-reg">Register</a></li>
+                            @endif
                             <li><a href="#">Petunjuk</a></li>
                             {{-- <li class="submenu">
                                 <a href="javascript:;">Drop Down</a>
@@ -82,7 +95,9 @@ https://templatemo.com/tm-537-art-factory
     <!-- ***** Header Area End ***** -->
     <div class="container">
     @if ($errors->any())
-        <div class="alert alert-danger">
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4><i class="icon fa fa-check-square-o"></i> Oops!</h4>
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -102,7 +117,7 @@ https://templatemo.com/tm-537-art-factory
     @if(session('error'))
     <div class="alert alert-danger alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h4><i class="icon fa fa-check-square-o"></i> Done!</h4>
+        <h4><i class="icon fa fa-check-square-o"></i> oops!</h4>
         <ul>
             <li>{{ Session::get('error') }}</li>
         </ul>
@@ -112,28 +127,60 @@ https://templatemo.com/tm-537-art-factory
 
     <!-- Modal -->
     <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-              <h4 class="modal-title" style="text-align: left" id="myModalLabel">Login</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          </div>
-          <div class="modal-body">
-                <form action="{{route('login.post')}}" method="post">
-                    {{ csrf_field() }}
-                    <div class="form-group">
-                        <label for="nik">NIK</label>
-                        <input type="text" name="nik" class="form-control" id="nik" placeholder="Email">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-          </div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="text-align: left" id="myModalLabel">Login</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('login.post')}}" method="post">
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                            <label for="nik">NIK</label>
+                            <input type="text" name="nik" class="form-control" id="nik" placeholder="NIK" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" class="form-control" id="password" placeholder="Password" autocomplete="off">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
+    </div>
+    <div class="modal fade" id="view_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="text-align: left" id="myModalLabel">Detail </h4>
+                    <button type="button" class="close" data-content="" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-4">No. IMP :</div>
+                        <div class="col-lg-8"><b id="md-noimp"></b></div>
+                        <div class="col-lg-4">NIK :</div>
+                        <div class="col-lg-8"><b id="md-nik"></b></div>
+                        <div class="col-lg-4">Nama :</div>
+                        <div class="col-lg-8"><b id="md-nm"></b></div>
+                        <div class="col-lg-4">Tanggal Ijin :</div>
+                        <div class="col-lg-8"><b id="md-tgl-ijn"></b></div>
+                        <div class="col-lg-4">Lama Ijin :</div>
+                        <div class="col-lg-8"><b id="md-lm-ijn"></b></div>
+                        <div class="col-lg-4">Jenis Ijin :</div>
+                        <div class="col-lg-8"><b id="md-jns-ijn"></b></div>
+                        <div class="col-lg-4">Alasan :</div>
+                        <div class="col-lg-8"><b id="md-als"></b></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="accept" data-impid="">Saya Setuju</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
     </div>
     @yield('content')
     <!-- ***** Footer Start ***** -->
@@ -174,6 +221,6 @@ https://templatemo.com/tm-537-art-factory
 
     <!-- Global Init -->
     <script src="/js/custom.js"></script>
-
+    @yield('script')
   </body>
 </html>

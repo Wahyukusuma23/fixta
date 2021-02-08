@@ -22,4 +22,11 @@ Route::post('/register', 'RegisterController@register')->name('register.post');
 Route::post('/login', 'LoginController@logint')->name('login.post');
 Route::get('/karyawan_dashboard', 'KaryawanController@index')->name('karyawan.index');
 Route::get('/karyawan_pengajuan', 'KaryawanController@form_imp')->name('karyawan.pengajuan');
+Route::post('/karyawan_pengajuan', 'KaryawanController@form_imp_post')->name('karyawan.pengajuan.post');
 Route::get('/list_pengajuan', 'KaryawanController@list_pengajuan')->name('list_pengajuan');
+
+Route::get('/line_leader', 'KaryawanController@line_leader')->name('line_leader');
+Route::get('/supervisor', 'KaryawanController@supervisor')->name('supervisor');
+Route::get('/human_resources', 'KaryawanController@human_resources')->name('human_resources');
+Route::get('logout', 'LoginController@logout')->name('user.logout');
+Route::post('ll_accept', 'KaryawanController@ll_accept')->name('ll_accept');

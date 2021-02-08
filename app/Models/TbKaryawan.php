@@ -24,4 +24,8 @@ class TbKaryawan extends Authenticatable
         'password',
         'line_kav'
     ];
+    public function imp()
+    {
+        return $this->hasMany('App\Models\TbImp', 'nik', 'nik');
+    }
 }

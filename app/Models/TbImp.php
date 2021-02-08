@@ -27,4 +27,13 @@ class TbImp extends Model
         'alasan_ijin',
         'lampiran'
     ];
+    public function karyawan()
+    {
+        return $this->belongsTo('App\Models\TbKaryawan', 'nik', 'nik');
+    }
+    protected $casts = [
+        'tgl_ijin' => 'datetime:d-m-Y',
+        'approve_ll'  => 'datetime:d-m-Y',
+        'approve_spv' => 'datetime:d-m-Y',
+    ];
 }

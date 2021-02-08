@@ -8,7 +8,7 @@
         <div class="container">
             <div class="row">
                 <div class="left-text col-lg-6 col-md-6 col-sm-12 col-xs-12" data-scroll-reveal="enter left move 30px over 0.6s after 0.4s">
-                    <p>Selamat Datang,</p>
+                    <p style="margin-bottom: 0">Selamat Datang,</p>
                     <h1> {{auth('kary')->user()->nama}}</h1>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.4s">
@@ -65,7 +65,11 @@
                             </div>
                         </div>
                     </div>
+                    @if (auth('kary')->user()->posisi == 'operator')
                     <a href="{{route('karyawan.pengajuan')}}" class="main-button">Ajukan IMP</a>
+                    @else
+                    <a href="{{route(auth('kary')->user()->posisi)}}" class="main-button">Lihat Pengajuan</a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -74,6 +78,55 @@
                 <div class="hr"></div>
             </div>
         </div>
+        @if (auth('kary')->user()->posisi == 'operator')
+        <br>
+        <div class="row">
+            <div class="col-lg-12">
+                <h5>List Pengajuan</h5>
+                <table class="table">
+                    <colgroup>
+                        <col style="width: 10%">
+                        <col style="width: 15%">
+                        <col style="width: 10%">
+                        <col style="width: 5%">
+                        <col style="width: 5%">
+                        <col style="width: 30%">
+                        <col style="width: 10%">
+                        <col style="width: 10%">
+                        <col style="width: 15%">
+                    </colgroup>
+                    <tr>
+                        <th>Tanggal Pengajuan</th>
+                        <th>No. IMP</th>
+                        <th>Tgl Ijin</th>
+                        <th>Lama Ijin</th>
+                        <th>Jenis Ijin</th>
+                        <th>Alasan Ijin</th>
+                        <th>LL</th>
+                        <th>SPV</th>
+                        {{-- <th>HRD</th> --}}
+                        <th>Lampiran</th>
+                    </tr>
+                    @forelse ($imps as $imp)
+                        <tr>
+                            <td>{{date('d-m-Y', strtotime($imp->created_at))}}</td>
+                            <td>{{$imp->no_imp}}</td>
+                            <td>{{date('d-m-Y', strtotime($imp->tgl_ijin))}}</td>
+                            <td>{{$imp->lama_ijin}}</td>
+                            <td>{{$imp->id_ijin}}</td>
+                            <td>{{$imp->alasan_ijin}}</td>
+                            <td>{{$imp->approve_ll?date('d-m-Y', strtotime($imp->approve_ll)):'-'}}</td>
+                            <td>{{$imp->approve_spv?date('d-m-Y', strtotime($imp->approve_spv)):'-'}}</td>
+                            {{-- <td>{{$imp->approve_eb}}</td> --}}
+                            <td><button class="btn btn-primary">Unduh</button></td>
+                        </tr>
+                    @empty
+
+                    @endforelse
+                </table>
+            </div>
+        </div>
+        @endif
     </div>
 </section>
 <!-- ***** Features Big Item End ***** -->

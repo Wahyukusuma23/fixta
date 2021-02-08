@@ -7,14 +7,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\TbImp;
 use App\Models\TbKaryawan;
+use App\Models\TbLine;
 use App\User;
+use Auth;
 
 class RegisterController extends Controller
 {
     public function view()
     {
-        // dd(TbKaryawan::get());
-            return view('register');
+        $lines = TbLine::get();
+        return view('register', compact('lines'));
     }
     public function register(Request $request)
     {
@@ -23,7 +25,6 @@ class RegisterController extends Controller
             'nama' => ['required'],
             'ttl' => ['required'],
             'dept' => ['required'],
-            'posisi' => ['required'],
             'status_kerja' => ['required'],
             'line_kav' => ['required'],
             'password' => ['required','confirmed'],
@@ -35,17 +36,17 @@ class RegisterController extends Controller
             'nama' => $request->nama,
             'ttl' => $request->ttl,
             'dept' => $request->dept,
-            'posisi' => $request->posisi,
+            'posisi' => 'operator',
             'status_kerja' => $request->status_kerja,
             'line_kav' => $request->line_kav,
             'password' => Hash::make($request->password),
         ]);
         if ($add_user) {
-            dd('ok');
+            Auth::guard('kary')->attempt(['nik' => $request->nik, 'password' => $request->password]);
+            return redirect()->route('karyawan.index')->with('success', 'Pendaftaran akun berhasil');
         } else {
-            dd('not ok');
+            return redirect()->route('home')->with('error', 'Pendaftaran Gagal');
         }
-
     }
 }
 ?>
