@@ -20,16 +20,16 @@ class LoginController extends Controller
             $nik = TbKaryawan::where('nik', $request->nik)->first();
             switch ($nik->posisi) {
                 case 'operator':
-                    return redirect()->route('karyawan.index');
+                    return redirect()->intended(route('karyawan.index'));
                     break;
                 case 'line_leader':
-                    return redirect()->route('line_leader');
+                    return redirect()->intended(route('line_leader'));
                     break;
                 case 'supervisor':
-                    return redirect()->route('supervisor');
+                    return redirect()->intended(route('supervisor'));
                     break;
-                case 'hrd':
-                    return redirect()->route('human_resources');
+                case 'human_resources':
+                    return redirect()->intended(route('human_resources'));
                     break;
                 default:
                 return redirect()->route('home')->with('error','Terjadi Kesalahan');

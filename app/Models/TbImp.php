@@ -31,6 +31,10 @@ class TbImp extends Model
     {
         return $this->belongsTo('App\Models\TbKaryawan', 'nik', 'nik');
     }
+    public function ijin()
+    {
+        return $this->belongsTo('App\Models\TbIjin', 'id_ijin', 'id');
+    }
     protected $casts = [
         'tgl_ijin' => 'datetime:d-m-Y',
         'approve_ll'  => 'datetime:d-m-Y',

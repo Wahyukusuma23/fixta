@@ -11,7 +11,7 @@
 <div class="contact-form">
 
     <h3 style="color: white;text-align:left;margin-bottom:1rem">List Pengajuan</h3>
-    <p style="color: white;text-align:left;margin-bottom:3rem">User : {{auth('kary')->user()->nama}}</p>
+    <p style="color: white;text-align:left;margin-bottom:3rem">User : <span style="text-transform: capitalize">{{auth('kary')->user()->nama.' ['.auth('kary')->user()->posisi.']'}}</span></p>
 <table class="table">
     <thead class="thead-light">
         <tr>
@@ -43,15 +43,19 @@
                 data-nik="{{$list->nik}}"
                 data-nmkar="{{$list->karyawan->nama}}"
                 data-tglijin="{{$list->tgl_ijin}}"
-                data-lmijin="{{$list->lama_ijin}}"
-                data-idijin="{{$list->id_ijin}}"
+                data-lmijin="{{$list->lama_ijin.' hari'}}"
+                data-idijin="{{$list->ijin->id_ijin}}"
                 data-alsijin="{{$list->alasan_ijin}}"
+                data-ll="{{is_null($list->approve_ll)?'no':'ok'}}"
+                data-spv="{{is_null($list->approve_spv)?'no':'ok'}}"
                 data-toggle="modal"
                 data-target="#view_detail" >Lihat Detail</button>
             </td>
         </tr>
         @empty
-
+        <tr>
+            <td colspan="8" style="text-align: center">[Belum ada data]</td>
+        </tr>
         @endforelse
     </tbody>
   </table>
@@ -70,6 +74,23 @@
         $('#md-jns-ijn').html($(this).data('idijin'))
         $('#md-als').html($(this).data('alsijin'))
         $('#accept').attr('data-impid',$(this).data('noimp'))
+        var user = "{{auth('kary')->user()->posisi}}";
+        var acc_ll = $(this).data('ll')
+        var acc_spv = $(this).data('spv')
+        if (user == 'line_leader') {
+            if ($(this).data('ll')=='ok') {
+                $('#accept').hide()
+            }else{
+                $('#accept').show()
+            }
+        }
+        if (user == 'supervisor'){
+            if ($(this).data('spv')=='ok') {
+                $('#accept').hide()
+            }else{
+                $('#accept').show()
+            }
+        }
     })
     $('.modal-footer').on('click','#accept', function(){
         // console.log($(this).data('impid'))

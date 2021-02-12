@@ -14,6 +14,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class KaryawanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:kary', ['except' => 'logout']);
+    }
     public function index()
     {
         $imps = TbImp::where('nik', auth('kary')->user()->nik)->get();
@@ -27,10 +31,10 @@ class KaryawanController extends Controller
     public function form_imp_post(Request $request)
     {
         $validatedData = $request->validate([
-            'tgl_ijin' => ['required', 'max:255', 'unique:App\Models\TbKaryawan,nik'],
-            'lama_ijin' => ['required', 'numeric'],
+            'tgl_ijin' => ['required'],
+            'lama_ijin' => ['required', 'numeric','min:1'],
             'kode_ijin' => ['required'],
-            'alasan' => ['required','max:500']
+            'alasan' => ['required','max:10']
         ]);
         $add_user = TbImp::create([
             'nik' => auth('kary')->user()->nik,
@@ -45,12 +49,9 @@ class KaryawanController extends Controller
         } else {
             return redirect()->back()->with('error', 'terjadi kesalahan sistem');
         }
-
-        dd($request->all());
     }
     public function line_leader()
     {
-        // dd('hai');
         $listln = TbLine::where('line_leader',auth('kary')->user()->nik)->pluck('nama')->toArray();
         $lists = TbImp::whereHas('karyawan', function (Builder $query) use ($listln) {
             return $query->whereIn('line_kav', $listln);
@@ -65,11 +66,122 @@ class KaryawanController extends Controller
         })->where('approve_ll','!=',null)->get();
         return view('admin', compact('lists'));
     }
+    public function human_resources_option(Request $request)
+    {
+        if ($request->line == '') {
+            if ($request->name == '') {
+                if ($request->from == '' || $request->to == '') {
+                    $lists=TbImp::paginate($request->limit?$request->limit:15);
+                } else {
+                    $lists=TbImp::when($request, function ($query) use ($request){
+                    $query->where('created_at', '>', $request->from)
+                            ->where('created_at', '<', $request->to)
+                            ->orWhere('created_at', "like", "%$request->from%")
+                            ->orWhere('created_at', "like", "%$request->to%");
+                    })->paginate($request->limit?$request->limit:10);
+                    $lists->appends($request->only('from', 'to', 'limit'));
+                }
+            }else {
+                if ($request->from == '' || $request->to == '') {
+                    $lists = TbImp::whereHas('karyawan', function ($query) use ($request) {
+                        $query->where('nama', "like", "%$request->name%");
+                    })->paginate($request->limit?$request->limit:10);
+                } else {
+                    $lists = TbImp::whereHas('karyawan', function ($query) use ($request) {
+                        $query->where('nama', "like", "%$request->name%");
+                    })->when($request, function ($query) use ($request){
+                        $query->where('created_at', '>', $request->from)
+                                ->where('created_at', '<', $request->to)
+                                ->orWhere('created_at', "like", "%$request->from%")
+                                ->orWhere('created_at', "like", "%$request->to%");
+                        })->paginate($request->limit?$request->limit:10);
+                }
+                $lists->appends($request->only('from', 'to', 'name'));
+            }
+        } else {
+            $lists = TbImp::whereHas('karyawan', function ($query) use ($request) {
+                $query->where('line_kav', "like", "%$request->line%");
+            })->paginate($request->limit?$request->limit:10);
+        }
+        $lines = TbLine::get();
+        $data = [
+            'from'=>$request->from,
+            'to'=>$request->to,
+            'name'=>$request->name,
+            'lists'=>$lists,
+            'lines'=>$lines,
+            'linefr'=>$request->line
+        ];
+        return view('hrd', $data);
+    }
+    public function human_resources_report(Request $request)
+    {
+        if ($request->name == '') {
+            if ($request->from == '' || $request->to == '') {
+                $lists=TbImp::paginate($request->limit?$request->limit:10);
+            } else {
+                $lists=TbImp::when($request, function ($query) use ($request){
+                $query->where('created_at', '>', $request->from)
+                        ->where('created_at', '<', $request->to)
+                        ->orWhere('created_at', "like", "%$request->from%")
+                        ->orWhere('created_at', "like", "%$request->to%");
+                })->paginate($request->limit?$request->limit:10);
+                $lists->appends($request->only('from', 'to', 'limit'));
+            }
+        }else {
+            if ($request->from == '' || $request->to == '') {
+                $lists = TbImp::whereHas('karyawan', function ($query) use ($request) {
+                    $query->where('nama', "like", "%$request->name%");
+                })->paginate($request->limit?$request->limit:10);
+            } else {
+                $lists = TbImp::whereHas('karyawan', function ($query) use ($request) {
+                    $query->where('nama', "like", "%$request->name%");
+                })->when($request, function ($query) use ($request){
+                    $query->where('created_at', '>', $request->from)
+                            ->where('created_at', '<', $request->to)
+                            ->orWhere('created_at', "like", "%$request->from%")
+                            ->orWhere('created_at', "like", "%$request->to%");
+                    })->paginate($request->limit?$request->limit:10);
+            }
+
+            $lists->appends($request->only('from', 'to', 'name'));
+        }
+        $i=1;
+        foreach ($lists as $list) {
+            $data[$i][0] = $i;
+            $data[$i][1]=$list->created_at;
+            $data[$i][2]=$list->no_imp;
+            $data[$i][3]=$list->karyawan->nama;
+            $data[$i][4]=$list->tgl_ijin;
+            $data[$i][5]=$list->lama_ijin;
+            $data[$i][6]=$list->ijin->id_ijin.' - '.$list->ijin->jenis_ijin;
+            if (is_null($list->approve_ll)) {
+                if (is_null($list->approve_spv)) {
+                    $status = 'APPPROVE KOSONG';
+                } else {
+                    $status = 'LL KOSONG';
+                }
+            } else {
+                if (is_null($list->approve_spv)) {
+                    $status = 'SPV KOSONG';
+                } else {
+                    $status = 'LENGKAP';
+                }
+            }
+            $data[$i][7]=$status;
+            $i++;
+        }
+        $fileName         = "IMP_REPORT".date("dmY-hs").".xls";
+        $headerRow        = array("Nomor","Tanggal Pengajuan","No. IMP","Nama Karyawan","Tanggal Ijin", "Lama Ijin","Jenis Ijin","Status");
+
+        $this->ExportXls($fileName, $headerRow, $data);
+    }
     public function human_resources()
     {
-        $lists = TbImp::orderBy('created_at', 'desc')->get();
-        // dd('lhalo hrd');
-        return view('hrd', compact('lists'));
+        // dd('bener gk sih');
+        $lists = TbImp::orderBy('created_at', 'desc')->paginate(10);
+        $lines = TbLine::get();
+        return view('hrd', compact('lists', 'lines'));
     }
     public function ll_accept(Request $request)
     {
@@ -85,6 +197,21 @@ class KaryawanController extends Controller
         } catch (\Throwable $th) {
             return 'notok';
         }
+    }
+    protected function ExportXls($fileName, $headerRow, $data)
+    {
+        # fungsi untuk export XLS
+        # increase max_execution_time to 10 min if data set is very large
+        ini_set('max_execution_time', 1600);
+        $fileContent = implode("\t ", $headerRow)."\n";
+        foreach($data as $result) {
+            $fileContent .=  implode("\t ", $result)."\n";
+        }
+        # you can set csv format
+        header('Content-type: application/vnd-ms-excel');
+        header('Content-Disposition: attachment; filename='.$fileName);
+        echo $fileContent;
+        exit;
     }
 }
 ?>

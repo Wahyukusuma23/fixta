@@ -13,17 +13,18 @@
                 <form method="POST" action="{{route('register.post')}}">
                     {{ csrf_field() }}
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="NIK" name="nik">
+                        <input type="text" class="form-control" placeholder="NIK" name="nik" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Nama" name="nama">
+                        <input type="text" class="form-control" placeholder="Nama" name="nama" required>
                     </div>
                     <div class="form-group">
-                        <input type="date" class="form-control" placeholder="Tanggal Lahir" name="ttl">
+                        <label for="">Tanggal Lahir</label>
+                        <input type="date" class="form-control" placeholder="Tanggal Lahir" name="ttl" required>
                     </div>
                     <div class="form-group">
-                        <label for="">Status Kerja</label>
-                        <select class="form-control" name="dept" autocomplete="off">
+                        <label for="">Departemen</label>
+                        <select class="form-control" name="dept" autocomplete="off" required>
                             <option value="">Pilih Departemen</option>
                             <option value="prod">Produksi</option>
                             <option value="mtc">Maintenance</option>
@@ -33,26 +34,26 @@
                     </div>
                     <div class="form-group">
                         <label for="">Status Kerja</label>
-                        <select class="form-control" name="status_kerja">
+                        <select class="form-control" name="status_kerja" required>
                             <option value="1">Kontrak</option>
                             <option value="2">Tetap</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="">Line</label>
-                        <select class="form-control" name="line_kav" autocomplete="off">
+                        <select class="form-control" name="line_kav" autocomplete="off" required>
                             <option value="">Pilih Line</option>
                             @foreach ($lines as $line)
-                                <option value="{{$line->id}}">{{$line->nama.' - '.$line->car_line}}</option>
+                                <option value="{{$line->nama}}">{{$line->nama.' - '.$line->car_line}}</option>
                             @endforeach
                         </select>
                         {{-- <input type="text" class="form-control" placeholder="Line Kav" name="line_kav"> --}}
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password" name="password" autocomplete="off">
+                        <input type="password" class="form-control" placeholder="Password" name="password" autocomplete="off" required>
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Confirm Password" name="password_confirmation" autocomplete="off">
+                        <input type="password" class="form-control" placeholder="Confirm Password" name="password_confirmation" autocomplete="off" required>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary right" type="submit">Daftar</button>

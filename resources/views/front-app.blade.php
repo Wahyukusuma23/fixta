@@ -70,9 +70,8 @@ https://templatemo.com/tm-537-art-factory
                             <li><a href="{{route('karyawan.index')}}" class="btn-reg">Dashboard</a></li>
                             <li><a href="{{route('user.logout')}}">Logout</a></li>
                             @else
-                            <li><a href="{{route('register.view')}}" class="btn-reg">Register</a></li>
+                            <li><a href="#" class="btn-reg"  data-toggle="modal" data-target="#login">Login</a></li>
                             @endif
-                            <li><a href="#">Petunjuk</a></li>
                             {{-- <li class="submenu">
                                 <a href="javascript:;">Drop Down</a>
                                 <ul>
@@ -221,6 +220,12 @@ https://templatemo.com/tm-537-art-factory
 
     <!-- Global Init -->
     <script src="/js/custom.js"></script>
+    <script>
+        var pathname = window.location.href;
+            if (pathname.includes("#login")) {
+                $('#login').modal('show');
+            }
+    </script>
     @yield('script')
   </body>
 </html>

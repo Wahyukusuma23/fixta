@@ -14,8 +14,19 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
+        // dd(auth('kary')->user()->nama);
         if (! $request->expectsJson()) {
-            return route('login');
+            return route('home').'#login';
         }
+        // return $next($request);
     }
+    // public function handle($request, Closure $next)
+    // {
+    //     //check here if the user is authenticated
+    //     if ( ! $this->auth()->user() )
+    //     {
+    //         return redirect()->route('home');
+    //     }
+    //     return $next($request);
+    // }
 }

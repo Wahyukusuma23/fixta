@@ -34,13 +34,15 @@ margin-bottom: 30px;
             {{ csrf_field() }}
           <div class="row">
             <div class="col-md-12 col-sm-12">
-              <fieldset>
+              <fieldset style="text-align:left">
+                <label for="" style="color: white;">Tanggal Ijin</label>
                 <input name="tgl_ijin" type="date" id="tgl_ijin" placeholder="Tanggal Ijin" required="" class="contact-field">
               </fieldset>
             </div>
             <div class="col-md-12 col-sm-12">
               <fieldset>
-                  <select name="kode_ijin" id="" class="contact-field">
+                  <select name="kode_ijin" id="" class="contact-field" autocomplete="off">
+                      <option value="">Pilih Jenis Ijin</option>
                       @foreach ($list_ijins as $list_ijin)
                         <option value="{{$list_ijin->id}}">{{$list_ijin->id_ijin.' - '.$list_ijin->jenis_ijin}}</option>
                       @endforeach
@@ -50,7 +52,7 @@ margin-bottom: 30px;
             </div>
             <div class="col-md-12 col-sm-12">
               <fieldset>
-                <input name="lama_ijin" type="number" id="lama_ijin" placeholder="Lama Ijin" required="" class="contact-field">
+                <input name="lama_ijin" type="number" id="lama_ijin" placeholder="Lama Ijin" min="1" required="" class="contact-field">
               </fieldset>
             </div>
             <div class="col-md-12 col-sm-12">

@@ -21,16 +21,14 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            'nik' => ['required', 'max:255', 'unique:App\Models\TbKaryawan,nik'],
-            'nama' => ['required'],
+            'nik' => ['required', 'max:15', 'unique:App\Models\TbKaryawan,nik'],
+            'nama' => ['required', 'max:70'],
             'ttl' => ['required'],
             'dept' => ['required'],
             'status_kerja' => ['required'],
             'line_kav' => ['required'],
             'password' => ['required','confirmed'],
         ]);
-        // dd($request->all());
-            // return view('register');
         $add_user = TbKaryawan::create([
             'nik' => $request->nik,
             'nama' => $request->nama,

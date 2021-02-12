@@ -28,5 +28,7 @@ Route::get('/list_pengajuan', 'KaryawanController@list_pengajuan')->name('list_p
 Route::get('/line_leader', 'KaryawanController@line_leader')->name('line_leader');
 Route::get('/supervisor', 'KaryawanController@supervisor')->name('supervisor');
 Route::get('/human_resources', 'KaryawanController@human_resources')->name('human_resources');
+Route::get('/human_resources_opt', 'KaryawanController@human_resources_option')->name('human_resources_option');
+Route::get('/human_resources_report', 'KaryawanController@human_resources_report')->name('human_resources_report');
 Route::get('logout', 'LoginController@logout')->name('user.logout');
 Route::post('ll_accept', 'KaryawanController@ll_accept')->name('ll_accept');

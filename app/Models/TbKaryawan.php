@@ -28,4 +28,8 @@ class TbKaryawan extends Authenticatable
     {
         return $this->hasMany('App\Models\TbImp', 'nik', 'nik');
     }
+    public function line()
+    {
+        return $this->belongsTo('App\Models\TbLine', 'line_kav', 'nama');
+    }
 }

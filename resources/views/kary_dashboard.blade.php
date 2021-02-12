@@ -45,7 +45,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">Tempat Tanggal Lahir</div>
-                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">: {{auth('kary')->user()->ttl}}</div>
+                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">: {{date('d M Y',strtotime(auth('kary')->user()->ttl))}}</div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">Departemen</div>
@@ -57,11 +57,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">Status Kerja</div>
-                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">: {{auth('kary')->user()->status}}</div>
+                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">: {{auth('kary')->user()->status_kerja==1?'kontrak':'tetap'}}</div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">Line Kavling</div>
-                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">: {{auth('kary')->user()->line_kav}}</div>
+                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">: {{auth('kary')->user()->line->nama.' - '.auth('kary')->user()->line->car_line}}</div>
                             </div>
                         </div>
                     </div>
@@ -83,17 +83,16 @@
         <div class="row">
             <div class="col-lg-12">
                 <h5>List Pengajuan</h5>
-                <table class="table">
+                <table class="table table-bordered">
                     <colgroup>
-                        <col style="width: 10%">
+                        <col style="width: 15%">
                         <col style="width: 15%">
                         <col style="width: 10%">
-                        <col style="width: 5%">
-                        <col style="width: 5%">
-                        <col style="width: 30%">
                         <col style="width: 10%">
                         <col style="width: 10%">
-                        <col style="width: 15%">
+                        <col style="width: 20%">
+                        <col style="width: 10%">
+                        <col style="width: 10%">
                     </colgroup>
                     <tr>
                         <th>Tanggal Pengajuan</th>
@@ -104,8 +103,6 @@
                         <th>Alasan Ijin</th>
                         <th>LL</th>
                         <th>SPV</th>
-                        {{-- <th>HRD</th> --}}
-                        <th>Lampiran</th>
                     </tr>
                     @forelse ($imps as $imp)
                         <tr>
@@ -115,13 +112,13 @@
                             <td>{{$imp->lama_ijin}}</td>
                             <td>{{$imp->id_ijin}}</td>
                             <td>{{$imp->alasan_ijin}}</td>
-                            <td>{{$imp->approve_ll?date('d-m-Y', strtotime($imp->approve_ll)):'-'}}</td>
-                            <td>{{$imp->approve_spv?date('d-m-Y', strtotime($imp->approve_spv)):'-'}}</td>
-                            {{-- <td>{{$imp->approve_eb}}</td> --}}
-                            <td><button class="btn btn-primary">Unduh</button></td>
+                            <td>{{$imp->approve_ll?date('d-m-Y', strtotime($imp->approve_ll)):'Belum'}}</td>
+                            <td>{{$imp->approve_spv?date('d-m-Y', strtotime($imp->approve_spv)):'Belum'}}</td>
                         </tr>
                     @empty
-
+                        <tr>
+                            <td colspan="8" style="text-align: center">[Belum ada data]</td>
+                        </tr>
                     @endforelse
                 </table>
             </div>
