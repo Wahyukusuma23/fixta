@@ -149,6 +149,66 @@ https://templatemo.com/tm-537-art-factory
             </div>
         </div>
     </div>
+    <div class="modal fade" id="chln" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="text-align: left" id="myModalLabel">Ubah Line</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('change_line')}}" method="post">
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                            <label for="">Pilih Line</label>
+                            <select class="form-control" name="new_line" autocomplete="off" required>
+                                <option value="">----</option>
+                                <?php
+                                $modlines = \App\Models\TbLine::get();
+                                ?>
+                                @foreach ($modlines as $modline)
+                                    <option value="{{$modline->id}}">{{$modline->nama.' - '.$modline->car_line}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" name="line_password" class="form-control" placeholder="Password" autocomplete="off">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="chpwd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="text-align: left" id="myModalLabel">Ubah Password</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('change_pwd')}}" method="post">
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                            <label for="password">Password Sekarang</label>
+                            <input type="password" name="current_password" class="form-control" placeholder="Password" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password Baru</label>
+                            <input type="password" name="new_password" class="form-control" placeholder="Password" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Konfirmasi Password Baru</label>
+                            <input type="password" name="new_password_confirmation" class="form-control" placeholder="Password" autocomplete="off">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="view_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

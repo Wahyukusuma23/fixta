@@ -25,6 +25,9 @@ class KaryawanController extends Controller
     }
     public function form_imp()
     {
+        if (auth('kary')->user()->posisi != 'operator') {
+            return redirect()->route('home')->with('error', 'Pengajuan IMP Online hanya berlaku bagi karyawan golongan 1 dan magang');
+        }
         $list_ijins = TbIjin::get();
         return view('form', compact('list_ijins'));
     }
@@ -68,6 +71,9 @@ class KaryawanController extends Controller
     }
     public function human_resources_option(Request $request)
     {
+        if (auth('kary')->user()->posisi != 'human_resources') {
+            return redirect()->route('home')->with('error', 'Autentikasi hanya tersedia bagi user tertentu');
+        }
         if ($request->line == '') {
             if ($request->name == '') {
                 if ($request->from == '' || $request->to == '') {
@@ -116,6 +122,9 @@ class KaryawanController extends Controller
     }
     public function human_resources_report(Request $request)
     {
+        if (auth('kary')->user()->posisi != 'human_resources') {
+            return redirect()->route('home')->with('error', 'Autentikasi hanya tersedia bagi user tertentu');
+        }
         if ($request->name == '') {
             if ($request->from == '' || $request->to == '') {
                 $lists=TbImp::paginate($request->limit?$request->limit:10);
@@ -178,7 +187,9 @@ class KaryawanController extends Controller
     }
     public function human_resources()
     {
-        // dd('bener gk sih');
+        if (auth('kary')->user()->posisi != 'human_resources') {
+            return redirect()->route('home')->with('error', 'Autentikasi hanya tersedia bagi user tertentu');
+        }
         $lists = TbImp::orderBy('created_at', 'desc')->paginate(10);
         $lines = TbLine::get();
         return view('hrd', compact('lists', 'lines'));

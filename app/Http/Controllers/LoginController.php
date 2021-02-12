@@ -6,6 +6,7 @@ use App\Models\TbImp;
 use App\Models\TbKaryawan;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Auth;
 
 class LoginController extends Controller
@@ -37,6 +38,34 @@ class LoginController extends Controller
             }
         }else {
             return redirect()->back()->with('error','Password atau NIK salah');
+        }
+    }
+    public function change_pwd(Request $request)
+    {
+        if (Auth::guard('kary')->attempt(['nik' => auth('kary')->user()->nik, 'password' => $request->current_password])) {
+            $validatedData = $request->validate([
+                'new_password' => ['required','confirmed'],
+            ]);
+            $which_user = TbKaryawan::find(auth('kary')->user()->id);
+            $which_user->password = Hash::make($request->new_password);
+            $which_user->save();
+            return redirect()->back()->with('success','Ubah Password Berhasil');
+        }else {
+            return redirect()->back()->with('error','Ubah Password Gagal');
+        }
+    }
+    public function change_line(Request $request)
+    {
+        if (Auth::guard('kary')->attempt(['nik' => auth('kary')->user()->nik, 'password' => $request->line_password])) {
+            $validatedData = $request->validate([
+                'new_line' => ['required'],
+            ]);
+            $which_user = TbKaryawan::find(auth('kary')->user()->id);
+            $which_user->line_kav = $request->new_line;
+            $which_user->save();
+            return redirect()->back()->with('success','Ubah Line Berhasil');
+        }else {
+            return redirect()->back()->with('error','Ubah Line Gagal');
         }
     }
     public function logout()

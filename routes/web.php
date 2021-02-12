@@ -32,3 +32,5 @@ Route::get('/human_resources_opt', 'KaryawanController@human_resources_option')-
 Route::get('/human_resources_report', 'KaryawanController@human_resources_report')->name('human_resources_report');
 Route::get('logout', 'LoginController@logout')->name('user.logout');
 Route::post('ll_accept', 'KaryawanController@ll_accept')->name('ll_accept');
+Route::post('change_pwd', 'LoginController@change_pwd')->name('change_pwd');
+Route::post('change_line', 'LoginController@change_line')->name('change_line');

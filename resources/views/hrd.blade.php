@@ -11,6 +11,10 @@
         background-color: #34c130;
         border-color: #34c130;
     }
+    .main-button{
+        padding: 6px 20px;
+        background-color: #5c9f4e;
+    }
 </style>
 <div class="row">
 
@@ -18,7 +22,11 @@
 <div class="contact-form">
 
     <h3 style="color: white;text-align:left;margin-bottom:1rem">List Pengajuan</h3>
-    <p style="color: white;text-align:left;margin-bottom:3rem">User : <span style="text-transform: capitalize"> {{auth('kary')->user()->nama}}</span></p>
+    <p style="color: white;text-align:left;margin-bottom:3rem">
+        User :
+        <span style="text-transform: capitalize"> {{auth('kary')->user()->nama}}</span>
+        <a href="{{route('register.view')}}" class="main-button">Tambah Pengguna</a>
+    </p>
     <h5 style="text-align: left;
     color: #495057;
     margin-bottom: 1rem;

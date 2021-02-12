@@ -29,12 +29,18 @@ class RegisterController extends Controller
             'line_kav' => ['required'],
             'password' => ['required','confirmed'],
         ]);
+        if (isset($request->posisi)) {
+            $posisi = $request->posisi;
+        } else {
+            $posisi = 'operator';
+        }
+
         $add_user = TbKaryawan::create([
             'nik' => $request->nik,
             'nama' => $request->nama,
             'ttl' => $request->ttl,
             'dept' => $request->dept,
-            'posisi' => 'operator',
+            'posisi' => $posisi,
             'status_kerja' => $request->status_kerja,
             'line_kav' => $request->line_kav,
             'password' => Hash::make($request->password),

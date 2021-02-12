@@ -22,6 +22,18 @@
                         <label for="">Tanggal Lahir</label>
                         <input type="date" class="form-control" placeholder="Tanggal Lahir" name="ttl" required>
                     </div>
+                    @if (Auth::guard('kary')->check())
+                        @if (auth('kary')->user()->posisi == 'human_resources')
+                        <div class="form-group">
+                            <label for="">Posisi</label>
+                            <select class="form-control" name="dept" autocomplete="off" required>
+                                <option value="">---</option>
+                                <option value="line_leader">Line Leader</option>
+                                <option value="supervisor">Supervisor</option>
+                            </select>
+                        </div>
+                        @endif
+                    @endif
                     <div class="form-group">
                         <label for="">Departemen</label>
                         <select class="form-control" name="dept" autocomplete="off" required>
@@ -44,7 +56,7 @@
                         <select class="form-control" name="line_kav" autocomplete="off" required>
                             <option value="">Pilih Line</option>
                             @foreach ($lines as $line)
-                                <option value="{{$line->nama}}">{{$line->nama.' - '.$line->car_line}}</option>
+                                <option value="{{$line->id}}">{{$line->nama.' - '.$line->car_line}}</option>
                             @endforeach
                         </select>
                         {{-- <input type="text" class="form-control" placeholder="Line Kav" name="line_kav"> --}}

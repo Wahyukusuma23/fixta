@@ -30,6 +30,6 @@ class TbKaryawan extends Authenticatable
     }
     public function line()
     {
-        return $this->belongsTo('App\Models\TbLine', 'line_kav', 'nama');
+        return $this->belongsTo('App\Models\TbLine', 'line_kav', 'id');
     }
 }
