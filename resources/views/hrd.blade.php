@@ -85,7 +85,7 @@
                 <td scope="col">{{$loop->iteration}}</td>
                 <td scope="col">{{$list->created_at->format('d-m-Y')}}</td>
                 <td scope="col">{{$list->karyawan->nama}}</td>
-                <td scope="col">{{$list->karyawan->line_kav}}</td>
+                <td scope="col">{{$list->karyawan->line->nama}}</td>
                 <td scope="col">{{$list->tgl_ijin->format('d-m-Y')}}</td>
                 <td scope="col">{{$list->lama_ijin}}</td>
                 <td scope="col" style="color:{{$list->approve_ll?'green':'red'}}">{{$list->approve_ll?'Sudah Approve':'Belum Approve'}}</td>

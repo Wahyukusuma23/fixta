@@ -279,13 +279,14 @@ https://templatemo.com/tm-537-art-factory
     <script src="/js/imgfix.min.js"></script>
 
     <!-- Global Init -->
-    <script src="/js/custom.js"></script>
     <script>
         var pathname = window.location.href;
-            if (pathname.includes("#login")) {
-                $('#login').modal('show');
-            }
+        if (pathname.includes("#login")) {
+            $('#login').modal('show');
+        }
+
     </script>
     @yield('script')
+    <script src="/js/custom.js"></script>
   </body>
 </html>

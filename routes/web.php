@@ -34,3 +34,6 @@ Route::get('logout', 'LoginController@logout')->name('user.logout');
 Route::post('ll_accept', 'KaryawanController@ll_accept')->name('ll_accept');
 Route::post('change_pwd', 'LoginController@change_pwd')->name('change_pwd');
 Route::post('change_line', 'LoginController@change_line')->name('change_line');
+Route::get('list_line', 'KaryawanController@list_line')->name('list_line');
+Route::post('list_line', 'KaryawanController@list_line_post')->name('list_line_post');
+Route::post('list_line_add', 'KaryawanController@list_line_add')->name('list_line_add');

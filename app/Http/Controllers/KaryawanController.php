@@ -37,7 +37,7 @@ class KaryawanController extends Controller
             'tgl_ijin' => ['required'],
             'lama_ijin' => ['required', 'numeric','min:1'],
             'kode_ijin' => ['required'],
-            'alasan' => ['required','max:10']
+            'alasan' => ['required','max:100']
         ]);
         $add_user = TbImp::create([
             'nik' => auth('kary')->user()->nik,
@@ -55,15 +55,16 @@ class KaryawanController extends Controller
     }
     public function line_leader()
     {
-        $listln = TbLine::where('line_leader',auth('kary')->user()->nik)->pluck('nama')->toArray();
+        $listln = TbLine::where('line_leader',auth('kary')->user()->nik)->pluck('id')->toArray();
         $lists = TbImp::whereHas('karyawan', function (Builder $query) use ($listln) {
             return $query->whereIn('line_kav', $listln);
         })->orderBy('created_at','desc')->get();
+        // dd($lists);
         return view('admin', compact('lists'));
     }
     public function supervisor()
     {
-        $listln = TbLine::where('spv',auth('kary')->user()->nik)->pluck('nama')->toArray();
+        $listln = TbLine::where('spv',auth('kary')->user()->nik)->pluck('id')->toArray();
         $lists = TbImp::whereHas('karyawan', function (Builder $query) use ($listln) {
             return $query->whereIn('line_kav',$listln);
         })->where('approve_ll','!=',null)->get();
@@ -223,6 +224,16 @@ class KaryawanController extends Controller
         header('Content-Disposition: attachment; filename='.$fileName);
         echo $fileContent;
         exit;
+    }
+    public function list_line()
+    {
+        $list_lines = TbLine::orderBy('nama')->get();
+        return view('line', compact('list_lines'));
+        dd('hai');
+    }
+    public function list_line_post(Request $request)
+    {
+        dd($request->all());
     }
 }
 ?>
