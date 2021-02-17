@@ -10,7 +10,11 @@
                 <div class="left-text col-lg-6 col-md-6 col-sm-12 col-xs-12" data-scroll-reveal="enter left move 30px over 0.6s after 0.4s">
                     <h1>Pengajuan <strong>IMP Online</strong></h1>
                     <p>Bentuk baru dalam pengajuan Form Ijin Meninggalkan Perusahaan. Efektif, Efisien dan Transparan.</p>
-                    <a href="{{route('register.view')}}" class="main-button-slider" style="cursor:pointer;color:white;width: 120px;display: inline-block;text-align: center;">Register</a>
+                    @if (Auth::guard('kary')->check())
+                    <a href="{{route('karyawan.pengajuan')}}" class="main-button-slider" style="cursor:pointer;color:white;width: auto;display: inline-block;text-align: center;">Buat Pengajuan</a>
+                    @else
+                    <a href="{{route('register.view')}}" class="main-button-slider" style="cursor:pointer;color:white;width: auto;display: inline-block;text-align: center;">Register</a>
+                    @endif
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.4s">
                     <img src="/images/right-image.png" class="rounded img-fluid d-block mx-auto" alt="First Vector Graphic">
@@ -30,12 +34,10 @@
             </div>
             <div class="right-text col-lg-5 col-md-12 col-sm-12 mobile-top-fix">
                 <div class="left-heading">
-                    <h5>Vivamus sodales nisi id ante molestie venenatis</h5>
+                    <h5>Tentang Perusahaan</h5>
                 </div>
                 <div class="left-text">
-                    <p>This template is <a href="#">last updated on 20 August 2019 </a>for main menu drop-down arrow and sub menu text color. Duis auctor dolor eu scelerisque vestibulum. Vestibulum lacinia, nisl sit amet tristique condimentum. <br><br>
-                    Sed a consequat velit. Morbi lectus sapien, vestibulum et sapien sit amet, ultrices malesuada odio. Donec non quam euismod, mattis dui a, ultrices nisi.</p>
-                    <a href="#about2" class="main-button">Discover More</a>
+                    <p>Surabaya Autocomp Indonesia atau PT. SAI yang berlokasi di Mojokerto, merupakan perusahaan penanaman modal asing dari Jepang, yang bergerak di bidang produksi Komponen Otomotif Wiring Harness Untuk Mobil Toyota, Daihatsu, Madza. Perusahaan ini terletak di Ktr Pusat Kawasan Ngoro Industri Persada Kawasan Ngoro Industri Persada Kav T-1 Ngoro Ngoro Industri 61385 Jawa Timur.</a>
                 </div>
             </div>
         </div>

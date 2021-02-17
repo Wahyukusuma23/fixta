@@ -26,7 +26,7 @@ class KaryawanController extends Controller
     public function form_imp()
     {
         if (auth('kary')->user()->posisi != 'operator') {
-            return redirect()->route('home')->with('error', 'Pengajuan IMP Online hanya berlaku bagi karyawan golongan 1 dan magang');
+            return redirect()->route('home')->with('error', 'Pengajuan IMP Online hanya berlaku bagi karyawan golongan 1 dan magang dan bukan dari Departemen HRD');
         }
         $list_ijins = TbIjin::get();
         return view('form', compact('list_ijins'));
